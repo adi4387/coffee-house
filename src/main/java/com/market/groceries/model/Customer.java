@@ -1,10 +1,14 @@
 package com.market.groceries.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.market.groceries.model.key.CustomerId;
@@ -22,11 +26,8 @@ public class Customer implements Serializable {
 	private CustomerId customerId;
 	@Column(name = "email_id")
 	private String emailId;
-
-	/*
-	 * @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy =
-	 * "customer") private List<Order> orders;
-	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+	private List<ProductOrder> productOrders;
 
 	public CustomerId getCustomerId() {
 		return customerId;
@@ -44,11 +45,13 @@ public class Customer implements Serializable {
 		this.emailId = emailId;
 	}
 
-	/*
-	 * public List<Order> getOrders() { return orders; }
-	 * 
-	 * public void setOrders(List<Order> orders) { this.orders = orders; }
-	 */
+	public List<ProductOrder> getProductOrders() {
+		return productOrders;
+	}
+
+	public void setproductOrders(List<ProductOrder> productOrders) {
+		this.productOrders = productOrders;
+	}
 
 	@Override
 	public String toString() {

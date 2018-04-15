@@ -1,5 +1,7 @@
 package com.market.groceries.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -34,11 +36,11 @@ public class ProductController {
 		String variety = productDto.getVariety();
 		Double availableQuantity = productDto.getAvailableQuantity();
 		Double pricePerUnit = productDto.getPricePerUnit();
-
+		String unit = productDto.getUnit();
 		if (name == null || variety == null || availableQuantity == null
-				|| pricePerUnit == null || pricePerUnit == null)
+				|| pricePerUnit == null || pricePerUnit == null || unit == null)
 			return CoffeeHouseConstants.PRODUCT_MANDATORY_FIELDS_NOT_PRESENT
-					+ "with name " + name;
+					+ " with name " + name;
 		else {
 			Product product = getProductFromProductDTO(productDto);
 			try {
@@ -52,69 +54,63 @@ public class ProductController {
 		return CoffeeHouseConstants.PRODUCT_ADD_ERROR;
 	}
 
-	@RequestMapping(value = "/{name}/{variety}/{quantity}", method = RequestMethod.PUT)
-	public String updateProduct(@PathVariable String name,
-			@PathVariable String variety, @PathVariable Double quantity) {
-		try {
-			ProductId productId = new ProductId();
-			productId.setName(name);
-			productId.setVariety(variety);
-			Optional<Product> opt = productRepository.findById(productId);
-			if (opt.isPresent()) {
-				Product product = opt.get();
-				Double totalAvailableQuantity = product.getAvailableQuantity()
-						+ (quantity != null ? quantity : 0.0D);
-				product.setAvailableQuantity(totalAvailableQuantity);
+	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	public String updateProduct(@RequestBody ProductDTO productDto) {
+		String name = productDto.getName();
+		String variety = productDto.getVariety();
+		Double availableQuantity = productDto.getAvailableQuantity();
+		Double pricePerUnit = productDto.getPricePerUnit();
+		String unit = productDto.getUnit();
+		if (name == null || variety == null || availableQuantity == null
+				|| pricePerUnit == null || pricePerUnit == null || unit == null)
+			return CoffeeHouseConstants.PRODUCT_MANDATORY_FIELDS_NOT_PRESENT
+					+ " with name " + name;
+		else {
+			Product product = getProductFromProductDTO(productDto);
+			try {
 				product = productRepository.save(product);
-				return CoffeeHouseConstants.PRODUCT_UPDATE_SUCCESS
-						+ " with name " + product.getProductId().getName();
-			} else {
-				return CoffeeHouseConstants.PRODUCT_UNAVAILABLE;
+				return product.getProductId().getName() + " "
+						+ CoffeeHouseConstants.PRODUCT_UPDATE_SUCCESS;
+			} catch (Exception e) {
+				logger.error(CoffeeHouseConstants.PRODUCT_UPDATE_ERROR, e);
 			}
-		} catch (Exception e) {
-			logger.error(CoffeeHouseConstants.PRODUCT_UPDATE_ERROR, e);
 		}
 		return CoffeeHouseConstants.PRODUCT_UPDATE_ERROR;
 	}
-	
+
 	@RequestMapping(value = "/{name}/{variety}", method = RequestMethod.GET)
-	public Product getProduct(@PathVariable String name, @PathVariable String variety) {
-		Product product = null;
+	public ProductDTO getProduct(@PathVariable String name,
+			@PathVariable String variety) {
+		ProductDTO productDto = null;
 		try {
 			ProductId productId = new ProductId();
 			productId.setName(name);
 			productId.setVariety(variety);
 			Optional<Product> opt = productRepository.findById(productId);
 			if (opt.isPresent()) {
-				product = opt.get();
+				productDto = getProductDTOFromProduct(opt.get());
 			}
 		} catch (Exception e) {
 			logger.error(CoffeeHouseConstants.PRODUCT_FETCH_ERROR, e);
 		}
-		return product;
+		return productDto;
 	}
-	
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
-	public Product getProduct(@PathVariable String name) {
-		Product product = null;
+
+	@RequestMapping(value = "/allAvailable", method = RequestMethod.GET)
+	public List<ProductDTO> getAllAvailableProduct() {
+		List<ProductDTO> productDTOs = new ArrayList<>();
 		try {
-			product = new Product();
-			ProductId productId = new ProductId();
-			productId.setName("Arabica");
-			productId.setVariety("Indian");
-			product.setProductId(productId);
-			product.setAvailableQuantity(10000D);
-			product.setPricePerUnit(100D);
-			product.setUnit(Unit.GRAM);
-			productRepository.save(product);
-			Optional<Product> opt = productRepository.findById(productId);
-			if (opt.isPresent()) {
-				product = opt.get();
+			List<Product> products = productRepository
+					.findAllAvailableProducts();
+			if (null != products && !products.isEmpty()) {
+				for (Product product : products) {
+					productDTOs.add(getProductDTOFromProduct(product));
+				}
 			}
 		} catch (Exception e) {
 			logger.error(CoffeeHouseConstants.PRODUCT_FETCH_ERROR, e);
 		}
-		return product;
+		return productDTOs;
 	}
 
 	public Product getProductFromProductDTO(ProductDTO productDto) {
@@ -123,7 +119,8 @@ public class ProductController {
 		productId.setName(productDto.getName());
 		productId.setVariety(productDto.getVariety());
 		product.setProductId(productId);
-		product.setAvailableQuantity(productDto.getPricePerUnit());
+		product.setAvailableQuantity(productDto.getAvailableQuantity());
+		product.setPricePerUnit(productDto.getPricePerUnit());
 		product.setUnit(Unit.valueOf(productDto.getUnit()));
 		return product;
 	}

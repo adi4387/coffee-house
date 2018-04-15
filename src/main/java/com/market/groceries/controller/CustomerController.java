@@ -65,28 +65,6 @@ public class CustomerController {
 		}
 		return customerDTO;
 	}
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public CustomerDTO getCustomer(@PathVariable String id) {
-		CustomerDTO customerDTO = null;
-		try {
-			Customer customer = new Customer();
-			CustomerId customerId = new CustomerId();
-			customerId.setFirstName("Varun");
-			customerId.setLastName("Dhawan");
-			customerId.setPhoneNumber("+919999911111");
-			customer.setCustomerId(customerId);
-			customer.setEmailId("varun.dhawan@abc.com");
-			customerRepository.save(customer);
-			Optional<Customer> optCcustomer = customerRepository.findById(customerId);
-			if(optCcustomer.isPresent()) {
-				customerDTO = getCustomerDTOFromCustomer(optCcustomer.get());
-			}
-		} catch (Exception e) {
-			logger.error("Exception while fetching customer. ", e);
-		}
-		return customerDTO;
-	}
 
 	public Customer getCustomerFromCustomerDTO(CustomerDTO customerDto) {
 		Customer customer = new Customer();
