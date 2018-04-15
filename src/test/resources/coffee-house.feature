@@ -17,26 +17,41 @@
 ## (Comments)
 #Sample Feature Definition Template
 @tag
-Feature: Title of your feature
-  I want to use this template for my feature file
+Feature: Coffee House feature
 
   @tag1
   Scenario: Add a new customer
-    Given I want to write a step with precondition
-    And some other precondition
-    When I complete action
-    And some other action
-    And yet another action
-    Then I validate the outcomes
-    And check more outcomes
-
+    Given The customer is a new customer
+    When I want to add a new customer
+    Then the customer should be added in our system
+    
   @tag2
-  Scenario Outline: Title of your scenario outline
-    Given I want to write a step with <name>
-    When I check for the <value> in step
-    Then I verify the <status> in step
+  Scenario: Add a new variety of Coffee
+    Given The coffee is a new variety of coffee
+    When I want to add a variety of coffee
+    Then the coffee should be added in our inventory
+    
+  @tag3
+  Scenario Outline: A customer places an order
+  	Given The variety of coffee exists with <name>
+  	When The customer wants to buy <quantity>
+  	Then I verify the order <amount> while billing
 
     Examples: 
-      | name  | value | status  |
-      | name1 |     5 | success |
-      | name2 |     7 | Fail    |
+      | Arabica   | 100 | 10000 |
+      | Arabica   | 200 | 20000 |
+      | Kents     | 100 | 50000 |
+			| Cauvery   | 100 | 10000 |
+			
+	@tag4
+  Scenario Outline: A customer places an order
+  	Given The variety of <name> exists with <price>
+  	When The customer wants to buy <quantity> gm
+  	Then I verify the order <amount> while billing for each coffee
+
+    Examples: 
+      | Arabica   | 100 | 100 | 10000 |
+      | Arabica   | 200 | 200 | 20000 |
+      | Kents     | 100 | 500 | 50000 |
+			| Cauvery   | 100 | 100 | 10000 |
+			
