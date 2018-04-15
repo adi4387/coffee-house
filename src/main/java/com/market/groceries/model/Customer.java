@@ -7,7 +7,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.google.common.base.Objects;
 import com.market.groceries.model.key.CustomerId;
 
 @Entity
@@ -24,6 +23,11 @@ public class Customer implements Serializable {
 	@Column(name = "email_id")
 	private String emailId;
 
+	/*
+	 * @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy =
+	 * "customer") private List<Order> orders;
+	 */
+
 	public CustomerId getCustomerId() {
 		return customerId;
 	}
@@ -39,6 +43,12 @@ public class Customer implements Serializable {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
+
+	/*
+	 * public List<Order> getOrders() { return orders; }
+	 * 
+	 * public void setOrders(List<Order> orders) { this.orders = orders; }
+	 */
 
 	@Override
 	public String toString() {

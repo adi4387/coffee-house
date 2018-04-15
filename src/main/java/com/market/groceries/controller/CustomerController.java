@@ -29,6 +29,12 @@ public class CustomerController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String addCustomer(@RequestBody CustomerDTO customerDTO) {
+		String firstName = customerDTO.getFirstName();
+		String lastName = customerDTO.getLastName();
+		String phoneNumber = customerDTO.getPhoneNumber();
+		if(firstName == null || lastName == null || phoneNumber == null) {
+			return CoffeeHouseConstants.CUSTOMER_MANDATORY_FIELDS_NOT_PRESENT;
+		}
 		Customer customer = getCustomerFromCustomerDTO(customerDTO);
 		try {
 			customer = customerRepository.save(customer);
@@ -39,7 +45,7 @@ public class CustomerController {
 		}
 
 		return CoffeeHouseConstants.CUSTOMER_ADD_ERROR + " with name "
-				+ customerDTO.getFirstName();
+				+ firstName;
 	}
 	
 	@RequestMapping(value = "/{firstName}/{lastName}/{phoneNumber}", method = RequestMethod.GET)
@@ -47,6 +53,9 @@ public class CustomerController {
 		CustomerDTO customerDTO = null;
 		try {
 			CustomerId customerId = new CustomerId();
+			customerId.setFirstName(firstName);
+			customerId.setLastName(lastName);
+			customerId.setPhoneNumber(phoneNumber);
 			Optional<Customer> customer = customerRepository.findById(customerId);
 			if(customer.isPresent()) {
 				customerDTO = getCustomerDTOFromCustomer(customer.get());

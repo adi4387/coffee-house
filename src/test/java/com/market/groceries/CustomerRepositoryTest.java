@@ -53,4 +53,19 @@ public class CustomerRepositoryTest {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		assertTrue(customer.equals(opt.get()));
 	}
+	
+	@Test
+	public void testWhenCustomerExistIShouldNotBeAbleToAddAgainTheSameCustomer() {
+		Customer customer = new Customer();
+		CustomerId customerId = new CustomerId();
+		customerId.setFirstName("Varun");
+		customerId.setLastName("Dhawan");
+		customerId.setPhoneNumber("+919999911111");
+		customer.setCustomerId(customerId);
+		customer.setEmailId("varun.dhawan@abc.com");
+		entityManager.persist(customer);
+		entityManager.flush();
+		Optional<Customer> opt = customerRepository.findById(customerId);
+		assertTrue(customer.equals(opt.get()));
+	}
 }

@@ -11,3 +11,19 @@ Below are the various APIs built in which are available to carry out below menti
 4. Generate a report of all the sales for a given day.
 
 All the APIs are RESTfull APIs.
+
+Customer - 
+	JSONs - 
+		{
+    		"firstName": "Varun",
+    		"lastName": "Dhawan",
+    		"phoneNumber": "919999911111",
+    		"emailId": "varun.dhawan@abc.com"
+		}
+	URLs - 
+		1. POST - http://localhost:8080/coffee-house/customer/
+		2. GET - http://localhost:8080/coffee-house/customer/Varun/Dhawan/919999911111
+
+
+
+
