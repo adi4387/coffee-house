@@ -37,9 +37,14 @@ public class CustomerController {
 		}
 		Customer customer = getCustomerFromCustomerDTO(customerDTO);
 		try {
-			customer = customerRepository.save(customer);
-			return customer.getCustomerId().getFirstName()
-					+ " successfully added in the database";
+			if(!isPresent(customer)) {
+				customer = customerRepository.save(customer);
+				return customer.getCustomerId().getFirstName()
+						+ " successfully added in the database";
+			} else {
+				return customer.getCustomerId().getFirstName()
+						+ " aleady exists";
+			}
 		} catch (Exception e) {
 			logger.error("Exception while adding a new customer. ", e);
 		}
@@ -85,5 +90,13 @@ public class CustomerController {
 		customerDto.setPhoneNumber(customerId.getPhoneNumber());
 		customerDto.setEmailId(customer.getEmailId());
 		return customerDto;
+	}
+	
+	public boolean isPresent(Customer customer) {
+		Optional<Customer> opt = customerRepository.findById(customer.getCustomerId());
+		if(opt.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 }

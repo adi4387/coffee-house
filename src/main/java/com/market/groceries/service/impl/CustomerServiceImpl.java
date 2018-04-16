@@ -41,13 +41,4 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		return customer;
 	}
-
-	public CustomerRepository getCustomerRepository() {
-		return customerRepository;
-	}
-
-	public void setCustomerRepository(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
-
 }

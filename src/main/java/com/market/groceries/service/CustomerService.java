@@ -6,6 +6,5 @@ import com.market.groceries.dto.CustomerDTO;
 
 @Service("customerService")
 public interface CustomerService {
-
 	public String addCustomer(CustomerDTO customerDTO);
 }

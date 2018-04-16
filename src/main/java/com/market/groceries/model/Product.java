@@ -1,8 +1,8 @@
 package com.market.groceries.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.market.groceries.constant.Unit;
@@ -35,8 +35,8 @@ public class Product implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "unit")
 	private Unit unit;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
-	private ProductOrder productOrder;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	private Set<ProductOrder> productOrders;
 
 	public ProductId getProductId() {
 		return productId;
@@ -70,12 +70,12 @@ public class Product implements Serializable {
 		this.unit = unit;
 	}
 
-	public ProductOrder getProductOrder() {
-		return productOrder;
+	public Set<ProductOrder> getProductOrders() {
+		return productOrders;
 	}
 
-	public void setProductOrder(ProductOrder productOrder) {
-		this.productOrder = productOrder;
+	public void setProductOrders(Set<ProductOrder> productOrders) {
+		this.productOrders = productOrders;
 	}
 
 	@Override

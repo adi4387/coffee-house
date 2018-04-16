@@ -1,7 +1,7 @@
 package com.market.groceries.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ public class Customer implements Serializable {
 	@Column(name = "email_id")
 	private String emailId;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
-	private List<ProductOrder> productOrders;
+	private Set<ProductOrder> productOrders;
 
 	public CustomerId getCustomerId() {
 		return customerId;
@@ -45,11 +45,11 @@ public class Customer implements Serializable {
 		this.emailId = emailId;
 	}
 
-	public List<ProductOrder> getProductOrders() {
+	public Set<ProductOrder> getProductOrders() {
 		return productOrders;
 	}
 
-	public void setproductOrders(List<ProductOrder> productOrders) {
+	public void setproductOrders(Set<ProductOrder> productOrders) {
 		this.productOrders = productOrders;
 	}
 

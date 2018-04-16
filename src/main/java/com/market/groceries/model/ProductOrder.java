@@ -3,7 +3,6 @@ package com.market.groceries.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,8 +29,8 @@ public class ProductOrder implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "order_id")
 	private Long orderId;
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinColumns({@JoinColumn(name = "name"), @JoinColumn(name = "variety")})
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "name"), @JoinColumn(name = "variety") })
 	private Product product;
 	@NotNull
 	@Column(name = "quantity")
@@ -41,12 +39,12 @@ public class ProductOrder implements Serializable {
 	@Column(name = "amount")
 	private Double amount;
 	@NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "order_at")
-    private Date orderDate = new Date();
-	
-	@ManyToOne
-	@JoinColumns({@JoinColumn(name = "first_name"), @JoinColumn(name = "last_name"), @JoinColumn(name = "phone_number")})
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "order_at")
+	private Date orderDate = new Date();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "first_name"),
+			@JoinColumn(name = "last_name"), @JoinColumn(name = "phone_number") })
 	private Customer customer;
 
 	public Long getOrderId() {
@@ -91,6 +89,10 @@ public class ProductOrder implements Serializable {
 
 	public Customer getCustomer() {
 		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 }

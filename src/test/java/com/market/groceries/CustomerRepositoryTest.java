@@ -21,7 +21,7 @@ public class CustomerRepositoryTest {
 
 	@Autowired
 	private TestEntityManager entityManager;
-	
+
 	@Autowired
 	private CustomerRepository customerRepository;
 
@@ -38,7 +38,7 @@ public class CustomerRepositoryTest {
 
 		assertTrue(customerPersisted.equals(customer));
 	}
-	
+
 	@Test
 	public void testWhenCustomerIsRetrieved() {
 		Customer customer = new Customer();
@@ -53,7 +53,7 @@ public class CustomerRepositoryTest {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		assertTrue(customer.equals(opt.get()));
 	}
-	
+
 	@Test
 	public void testWhenCustomerExistIShouldNotBeAbleToAddAgainTheSameCustomer() {
 		Customer customer = new Customer();

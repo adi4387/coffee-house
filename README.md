@@ -12,6 +12,8 @@ Below are the various APIs built in which are available to carry out below menti
 
 All the APIs are RESTfull APIs.
 
+Swagger - Ui : http://localhost:8080/swagger-ui.html
+
 Customer - 
 	JSON - 
 		{
@@ -39,3 +41,24 @@ Product -
 		3. PUT - http://localhost:8080/coffee-house/product/
 		4. GET - http://localhost:8080/coffee-house/product/allAvailable
 
+ProductOrder -
+	JSON - 
+		{
+    "customerDTO": {
+        "firstName": "Varun",
+        "lastName": "Dhawan",
+        "phoneNumber": "919999911111",
+        "emailId": "varun.dhawan@abc.com"
+    },
+    "productDTO": {
+        "name": "Arabica",
+        "variety": "Indian",
+        "availableQuantity": 1000,
+        "pricePerUnit": 100,
+        "unit": "GRAM"
+    },
+    "quantity": 100,
+    "amount": 10000,
+    "orderDate": 1523900335911,
+    "orderId": null
+}

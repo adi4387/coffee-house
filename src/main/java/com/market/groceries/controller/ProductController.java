@@ -44,9 +44,14 @@ public class ProductController {
 		else {
 			Product product = getProductFromProductDTO(productDto);
 			try {
-				product = productRepository.save(product);
-				return product.getProductId().getName()
-						+ " added successfully in the inventory";
+				if(!isProductAvailableInInventory(product)) {
+					product = productRepository.save(product);
+					return product.getProductId().getName()
+							+ " added successfully in the inventory";
+				} else {
+					return product.getProductId().getName()
+							+ " already exists in the inventory";
+				}
 			} catch (Exception e) {
 				logger.error(CoffeeHouseConstants.PRODUCT_ADD_ERROR, e);
 			}
@@ -134,5 +139,13 @@ public class ProductController {
 		productDto.setUnit(product.getUnit().toString());
 		productDto.setPricePerUnit(product.getPricePerUnit());
 		return productDto;
+	}
+	
+	public Boolean isProductAvailableInInventory(Product product) {
+		Optional<Product> opt = productRepository.findById(product.getProductId());
+		if(opt.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 }
